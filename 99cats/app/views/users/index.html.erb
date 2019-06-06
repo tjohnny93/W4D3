@@ -1,0 +1,10 @@
+<h1>Here are some users!</h1>
+<a href="<%=new_user_url%>">Create a new Wizard!</a>
+<ul>
+  <% @users.each do |user| %>
+  <li>
+    <%= user.username %>
+  </li>
+  <br>
+  <% end %>
+</ul>

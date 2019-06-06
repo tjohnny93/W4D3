@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
   def new
-    @session = Session.new
     render :new
   end
 
@@ -8,19 +7,21 @@ class SessionsController < ApplicationController
     @user = User.find_by_credentials(
       params[:user][:username], params[:user][:password]
     )
+    @user.reset_session_token!
+    session = @user.ensure_session_token
     if @user
-      login!(@user)
-      redirect_to user_url(@user)
+      login_user!(@user)
+      redirect_to cats_url
     else
+      flash.now[:errors] = ["Incorrect username and/or password"]
       render :new
     end
 
   end
 
   def destroy
-    user = User.find_by(id: params[:id])
-    user.destroy
-    redirect_to users_url
+    logout_user!
+    redirect_to new_session_url
   end
 
 end
